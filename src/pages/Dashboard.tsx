@@ -4,8 +4,7 @@ import { AdviceCard } from "@/components/AdviceCard";
 import { UserForm } from "@/components/UserForm";
 import { Thermometer, Droplets, Wind, Eye, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { WeatherChart } from "@/components/WeatherChart";
-
+// import { WeatherChart } from "@/components/WeatherChart";
 // Mock weather data structure
 interface WeatherData {
   temperature: number;
@@ -43,6 +42,12 @@ const Dashboard = () => {
 
   // Mock OpenWeatherMap API call
   const fetchWeatherData = async (location: string): Promise<WeatherData> => {
+    // Placeholder for actual OpenWeatherMap API integration
+    // const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
+    // const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`);
+    // const data = await response.json();
+    
+    // Mock data for demonstration
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -53,7 +58,7 @@ const Dashboard = () => {
           rainChance: 30,
           aqi: 85,
           condition: "Partly Cloudy",
-          location: location || "New York, NY",
+          location: location || "New York, NY"
         });
       }, 1000);
     });
@@ -61,45 +66,54 @@ const Dashboard = () => {
 
   // Mock ML model API call for personalized advice
   const fetchPersonalizedAdvice = async (profile: UserProfile): Promise<AdviceItem[]> => {
+    // Placeholder for actual ML model endpoint
+    // const response = await fetch('/api/predict', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ profile, weather: weatherData })
+    // });
+    // const data = await response.json();
+    
+    // Mock advice generation based on profile
     const mockAdvice: AdviceItem[] = [];
-
+    
     if (profile.commute) {
       mockAdvice.push({
         id: "commute-1",
         type: "tip",
         title: "Perfect Commute Weather",
         description: "Clear skies expected. Great day for walking or cycling to work!",
-        priority: "medium",
+        priority: "medium"
       });
     }
-
+    
     if (profile.activities.includes("jogging")) {
       mockAdvice.push({
         id: "jogging-1",
         type: "info",
         title: "Ideal Jogging Conditions",
         description: "Temperature is perfect for outdoor exercise. Consider jogging between 7-9 AM.",
-        priority: "medium",
+        priority: "medium"
       });
     }
-
+    
     if (profile.healthConditions.includes("asthma")) {
       mockAdvice.push({
         id: "health-1",
         type: "warning",
         title: "Air Quality Alert",
         description: "AQI is moderate. Consider limiting outdoor activities if you experience symptoms.",
-        priority: "high",
+        priority: "high"
       });
     }
-
+    
     if (profile.activities.includes("solar-panels")) {
       mockAdvice.push({
         id: "solar-1",
         type: "success",
         title: "Great Solar Potential",
         description: "Partly cloudy conditions will still provide good solar energy generation today.",
-        priority: "low",
+        priority: "low"
       });
     }
 
@@ -111,15 +125,18 @@ const Dashboard = () => {
   const handleProfileSubmit = async (profile: UserProfile) => {
     setLoading(true);
     try {
+      // Save user profile
       setUserProfile(profile);
-      localStorage.setItem("userProfile", JSON.stringify(profile));
-
+      localStorage.setItem('userProfile', JSON.stringify(profile));
+      
+      // Fetch weather data
       const weather = await fetchWeatherData(profile.location);
       setWeatherData(weather);
-
+      
+      // Fetch personalized advice
       const personalizedAdvice = await fetchPersonalizedAdvice(profile);
       setAdvice(personalizedAdvice);
-
+      
       toast({
         title: "Profile Updated",
         description: "Your personalized weather insights are ready!",
@@ -135,9 +152,9 @@ const Dashboard = () => {
     }
   };
 
-  // Load saved profile on mount
+  // Load saved profile on component mount
   useEffect(() => {
-    const savedProfile = localStorage.getItem("userProfile");
+    const savedProfile = localStorage.getItem('userProfile');
     if (savedProfile) {
       const profile = JSON.parse(savedProfile);
       setUserProfile(profile);
@@ -162,14 +179,12 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold text-gradient">Weather Dashboard</h1>
           </div>
           <p className="text-muted-foreground">
-            {weatherData
-              ? `Current conditions in ${weatherData.location}`
-              : "Complete your profile to get started"}
+            {weatherData ? `Current conditions in ${weatherData.location}` : "Complete your profile to get started"}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Weather Cards + Chart */}
+          {/* Left Column - Weather Cards */}
           <div className="lg:col-span-2 space-y-6">
             {weatherData ? (
               <>
@@ -222,12 +237,6 @@ const Dashboard = () => {
                     size="sm"
                   />
                 </div>
-
-                {/* Weather Chart Section */}
-                <div className="mt-6">
-                  <h2 className="text-xl font-semibold mb-4">Weather Trends</h2>
-                  <WeatherChart />
-                </div>
               </>
             ) : (
               <div className="text-center py-12">
@@ -242,17 +251,17 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Right Column - Advice + User Form */}
+          {/* Right Column - Tips and Profile */}
           <div className="space-y-6">
             <AdviceCard advice={advice} />
-            <UserForm
+            <UserForm 
               onSubmit={handleProfileSubmit}
               initialData={userProfile || undefined}
             />
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
