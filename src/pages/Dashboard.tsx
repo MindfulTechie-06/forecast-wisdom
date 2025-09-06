@@ -4,6 +4,7 @@ import { AdviceCard } from "@/components/AdviceCard";
 import { UserForm } from "@/components/UserForm";
 import { Thermometer, Droplets, Wind, Eye, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { WeatherChart } from "@/components/WeatherChart";
 
 // Mock weather data structure
 interface WeatherData {
@@ -42,12 +43,6 @@ const Dashboard = () => {
 
   // Mock OpenWeatherMap API call
   const fetchWeatherData = async (location: string): Promise<WeatherData> => {
-    // Placeholder for actual OpenWeatherMap API integration
-    // const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
-    // const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`);
-    // const data = await response.json();
-    
-    // Mock data for demonstration
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -66,17 +61,8 @@ const Dashboard = () => {
 
   // Mock ML model API call for personalized advice
   const fetchPersonalizedAdvice = async (profile: UserProfile): Promise<AdviceItem[]> => {
-    // Placeholder for actual ML model endpoint
-    // const response = await fetch('/api/predict', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ profile, weather: weatherData })
-    // });
-    // const data = await response.json();
-    
-    // Mock advice generation based on profile
     const mockAdvice: AdviceItem[] = [];
-    
+
     if (profile.commute) {
       mockAdvice.push({
         id: "commute-1",
@@ -86,7 +72,7 @@ const Dashboard = () => {
         priority: "medium"
       });
     }
-    
+
     if (profile.activities.includes("jogging")) {
       mockAdvice.push({
         id: "jogging-1",
@@ -96,7 +82,7 @@ const Dashboard = () => {
         priority: "medium"
       });
     }
-    
+
     if (profile.healthConditions.includes("asthma")) {
       mockAdvice.push({
         id: "health-1",
@@ -106,7 +92,7 @@ const Dashboard = () => {
         priority: "high"
       });
     }
-    
+
     if (profile.activities.includes("solar-panels")) {
       mockAdvice.push({
         id: "solar-1",
@@ -125,18 +111,15 @@ const Dashboard = () => {
   const handleProfileSubmit = async (profile: UserProfile) => {
     setLoading(true);
     try {
-      // Save user profile
       setUserProfile(profile);
-      localStorage.setItem('userProfile', JSON.stringify(profile));
-      
-      // Fetch weather data
+      localStorage.setItem("userProfile", JSON.stringify(profile));
+
       const weather = await fetchWeatherData(profile.location);
       setWeatherData(weather);
-      
-      // Fetch personalized advice
+
       const personalizedAdvice = await fetchPersonalizedAdvice(profile);
       setAdvice(personalizedAdvice);
-      
+
       toast({
         title: "Profile Updated",
         description: "Your personalized weather insights are ready!",
@@ -152,9 +135,8 @@ const Dashboard = () => {
     }
   };
 
-  // Load saved profile on component mount
   useEffect(() => {
-    const savedProfile = localStorage.getItem('userProfile');
+    const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
       const profile = JSON.parse(savedProfile);
       setUserProfile(profile);
@@ -179,12 +161,14 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold text-gradient">Weather Dashboard</h1>
           </div>
           <p className="text-muted-foreground">
-            {weatherData ? `Current conditions in ${weatherData.location}` : "Complete your profile to get started"}
+            {weatherData
+              ? `Current conditions in ${weatherData.location}`
+              : "Complete your profile to get started"}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Weather Cards */}
+          {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             {weatherData ? (
               <>
@@ -237,6 +221,9 @@ const Dashboard = () => {
                     size="sm"
                   />
                 </div>
+
+                {/* 📊 Weather Chart */}
+                <WeatherChart />
               </>
             ) : (
               <div className="text-center py-12">
@@ -251,10 +238,10 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Right Column - Tips and Profile */}
+          {/* Right Column */}
           <div className="space-y-6">
             <AdviceCard advice={advice} />
-            <UserForm 
+            <UserForm
               onSubmit={handleProfileSubmit}
               initialData={userProfile || undefined}
             />
