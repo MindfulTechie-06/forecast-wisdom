@@ -38,57 +38,41 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  // ✅ OpenWeather API integration
-  const fetchWeatherData = async (location: string): Promise<WeatherData> => {
-    const apiKey = import.meta.env.VITE_OPENWEATHER_KEY;
+  // ✅ Call Flask backend instead of OpenWeather + ML separately
+  const fetchWeatherAndAdvice = async (
+    location: string,
+    activity: string
+  ): Promise<{ weather: WeatherData; advice: AdviceItem[] }> => {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`
+      `${import.meta.env.VITE_BACKEND_URL}/get_advice?city=${location}&activity=${activity}`
     );
+    if (!response.ok) {
+      throw new Error("Failed to fetch data from backend");
+    }
     const data = await response.json();
 
-    return {
-      temperature: data.main.temp,
-      humidity: data.main.humidity,
-      windSpeed: data.wind.speed,
-      visibility: data.visibility / 1000, // meters → km
-      rainChance: data.clouds ? data.clouds.all : 0,
-      aqi: 80, // placeholder unless you have AQI API
-      condition: data.weather[0].description,
-      location: data.name,
+    const weather: WeatherData = {
+      temperature: data.temperature,
+      humidity: data.humidity,
+      windSpeed: data.wind_speed,
+      visibility: 10, // Flask doesn’t return visibility → set default
+      rainChance: data.rain_chance,
+      aqi: data.air_quality,
+      condition: data.description,
+      location: data.city,
     };
-  };
 
-  // ✅ Call ML model API with profile + weather
-  const fetchPersonalizedAdvice = async (
-    profile: UserProfile,
-    weather: WeatherData
-  ): Promise<AdviceItem[]> => {
-    try {
-      const response = await fetch(import.meta.env.VITE_ML_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${import.meta.env.VITE_ML_API_KEY}`,
-        },
-        body: JSON.stringify({ profile, weather }),
-      });
+    const adviceItems: AdviceItem[] = [
+      {
+        id: "ai-1",
+        type: "info",
+        title: "AI Advice",
+        description: data.advice,
+        priority: "medium",
+      },
+    ];
 
-      if (!response.ok) throw new Error("ML API failed");
-
-      const data = await response.json();
-      return data.advice || []; // must match your friend’s API response shape
-    } catch (err) {
-      console.error(err);
-      return [
-        {
-          id: "fallback",
-          type: "warning",
-          title: "Advice unavailable",
-          description: "AI model could not generate advice right now.",
-          priority: "low",
-        },
-      ];
-    }
+    return { weather, advice: adviceItems };
   };
 
   const handleProfileSubmit = async (profile: UserProfile) => {
@@ -97,13 +81,17 @@ const Dashboard = () => {
       setUserProfile(profile);
       localStorage.setItem("userProfile", JSON.stringify(profile));
 
-      // Step 1: fetch weather
-      const weather = await fetchWeatherData(profile.location);
-      setWeatherData(weather);
+      // send first activity or "general"
+      const activity = profile.activities[0] || "general";
 
-      // Step 2: fetch ML-based advice
-      const personalizedAdvice = await fetchPersonalizedAdvice(profile, weather);
-      setAdvice(personalizedAdvice);
+      // ✅ Fetch from Flask backend
+      const { weather, advice } = await fetchWeatherAndAdvice(
+        profile.location,
+        activity
+      );
+
+      setWeatherData(weather);
+      setAdvice(advice);
 
       toast({
         title: "Profile Updated",
@@ -112,7 +100,7 @@ const Dashboard = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update profile. Please try again.",
+        description: "Failed to fetch data. Please try again.",
         variant: "destructive",
       });
     } finally {
