@@ -1,73 +1,90 @@
-# Welcome to your Lovable project
+🌦️ AI Weather Advisor
 
-## Project info
+An AI-powered weather forecasting web app built with React + Vite, TailwindCSS, and OpenWeather API.
+The app displays current weather, weekly forecast, and provides AI-generated advice for safe travel and outdoor planning.
 
-**URL**: https://lovable.dev/projects/8e6d9c3b-6609-4f9a-987f-8d88398fb460
+🚀 Features
 
-## How can I edit this code?
+🔍 Search weather by city name
 
-There are several ways of editing your application.
+🌡️ Display current temperature, conditions, highs & lows
 
-**Use Lovable**
+📊 Interactive weekly forecast graph
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8e6d9c3b-6609-4f9a-987f-8d88398fb460) and start prompting.
+🤖 AI-generated travel & safety advice
 
-Changes made via Lovable will be committed automatically to this repo.
+⚡ Fast & modern stack (React + Vite)
 
-**Use your preferred IDE**
+🎨 Styled with TailwindCSS
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+📂 Project Structure
+ai-weather-advisor/
+├── public/               # Static assets
+├── src/
+│   ├── components/       # Reusable UI components
+│   ├── App.jsx           # Main app logic
+│   ├── index.css         # TailwindCSS styles
+│   └── main.jsx          # React entry point
+├── tailwind.config.js    # Tailwind configuration
+├── postcss.config.js     # PostCSS configuration
+├── package.json          # Dependencies & scripts
+└── README.md             # Documentation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+⚙️ Installation & Setup
+1. Clone Repository
+git clone https://github.com/your-username/ai-weather-advisor.git
+cd ai-weather-advisor
 
-Follow these steps:
+2. Install Dependencies
+npm install
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Setup Environment Variables
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Create a .env file in the root directory:
 
-# Step 3: Install the necessary dependencies.
-npm i
+VITE_WEATHER_API_KEY=your_openweather_api_key
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+
+(You can get your free API key from OpenWeather
+)
+
+4. Run Development Server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Visit 👉 http://localhost:5173
 
-**Use GitHub Codespaces**
+🛠️ Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Frontend: React (Vite)
 
-## What technologies are used for this project?
+Styling: TailwindCSS
 
-This project is built with:
+Charts: Recharts (for forecast graph)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+API: OpenWeather API
 
-## How can I deploy this project?
+📸 Screenshots
+🌍 City Weather Example
 
-Simply open [Lovable](https://lovable.dev/projects/8e6d9c3b-6609-4f9a-987f-8d88398fb460) and click on Share -> Publish.
+📌 Future Improvements
 
-## Can I connect a custom domain to my Lovable project?
+⏳ Add hourly forecasts
 
-Yes, you can!
+🌍 Add map-based weather view
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+🎤 Voice input for city search
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+🌐 Multi-language support
+
+🤝 Contributing
+
+Fork the project
+
+Create a new branch (feature-new-ui)
+
+Commit changes (git commit -m "Added dark mode")
+
+Push branch (git push origin feature-new-ui)
+
+Open a Pull Request
