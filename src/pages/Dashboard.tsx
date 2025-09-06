@@ -53,7 +53,7 @@ const Dashboard = () => {
           rainChance: 30,
           aqi: 85,
           condition: "Partly Cloudy",
-          location: location || "New York, NY"
+          location: location || "New York, NY",
         });
       }, 1000);
     });
@@ -69,7 +69,7 @@ const Dashboard = () => {
         type: "tip",
         title: "Perfect Commute Weather",
         description: "Clear skies expected. Great day for walking or cycling to work!",
-        priority: "medium"
+        priority: "medium",
       });
     }
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
         type: "info",
         title: "Ideal Jogging Conditions",
         description: "Temperature is perfect for outdoor exercise. Consider jogging between 7-9 AM.",
-        priority: "medium"
+        priority: "medium",
       });
     }
 
@@ -89,7 +89,7 @@ const Dashboard = () => {
         type: "warning",
         title: "Air Quality Alert",
         description: "AQI is moderate. Consider limiting outdoor activities if you experience symptoms.",
-        priority: "high"
+        priority: "high",
       });
     }
 
@@ -99,7 +99,7 @@ const Dashboard = () => {
         type: "success",
         title: "Great Solar Potential",
         description: "Partly cloudy conditions will still provide good solar energy generation today.",
-        priority: "low"
+        priority: "low",
       });
     }
 
@@ -135,6 +135,7 @@ const Dashboard = () => {
     }
   };
 
+  // Load saved profile on mount
   useEffect(() => {
     const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
@@ -168,7 +169,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
+          {/* Left Column - Weather Cards + Chart */}
           <div className="lg:col-span-2 space-y-6">
             {weatherData ? (
               <>
@@ -222,8 +223,11 @@ const Dashboard = () => {
                   />
                 </div>
 
-                {/* 📊 Weather Chart */}
-                <WeatherChart />
+                {/* Weather Chart Section */}
+                <div className="mt-6">
+                  <h2 className="text-xl font-semibold mb-4">Weather Trends</h2>
+                  <WeatherChart />
+                </div>
               </>
             ) : (
               <div className="text-center py-12">
@@ -238,7 +242,7 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Right Column */}
+          {/* Right Column - Advice + User Form */}
           <div className="space-y-6">
             <AdviceCard advice={advice} />
             <UserForm
