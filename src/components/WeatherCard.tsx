@@ -36,16 +36,16 @@ export const WeatherCard = ({
 
   return (
     <div className={cn(
-      "glass-card rounded-xl hover-glow",
+      "glass-card rounded-xl hover-glow perspective-container tilt-effect floating-3d glow-pulse",
       sizeClasses[size],
       className
     )}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg weather-gradient">
-            <Icon className="weather-icon text-white" />
+          <div className="p-2 rounded-lg weather-gradient group relative overflow-hidden">
+            <Icon className="weather-icon text-white relative z-10" />
           </div>
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide transition-colors duration-300 hover:text-primary">
             {title}
           </h3>
         </div>

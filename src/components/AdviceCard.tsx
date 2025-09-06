@@ -44,10 +44,10 @@ export const AdviceCard = ({ advice, className }: AdviceCardProps) => {
   };
 
   return (
-    <div className={cn("glass-card rounded-xl p-6", className)}>
+    <div className={cn("glass-card rounded-xl p-6 hover-glow floating-3d glow-pulse", className)}>
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg weather-gradient">
-          <Lightbulb className="weather-icon text-white" />
+        <div className="p-2 rounded-lg weather-gradient group relative overflow-hidden">
+          <Lightbulb className="weather-icon text-white relative z-10" />
         </div>
         <h2 className="text-xl font-semibold text-gradient">Your Daily Tips</h2>
       </div>
@@ -69,7 +69,7 @@ export const AdviceCard = ({ advice, className }: AdviceCardProps) => {
               <div
                 key={item.id}
                 className={cn(
-                  "p-4 rounded-lg border-l-4 bg-secondary/50 backdrop-blur-sm",
+                  "p-4 rounded-lg border-l-4 bg-secondary/50 backdrop-blur-sm transition-all duration-300 hover:bg-secondary/70 hover:transform hover:translateX-2 hover:shadow-lg cursor-pointer",
                   getPriorityBorder(item.priority)
                 )}
               >
